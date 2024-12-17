@@ -1,0 +1,76 @@
+<!-- chatbot.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        /* Stylowanie okna czatu */
+        #chatbox {
+            width: 400px;
+            height: 500px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: scroll;
+            background-color: #f9f9f9;
+        }
+        #chatlog {
+            height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+        }
+        #user_input {
+            width: 80%;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+        }
+        #send_button {
+            width: 15%;
+            padding: 10px;
+            background-color: #32de97;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="chatbox">
+        <div id="chatlog"></div>
+        <textarea id="user_input" placeholder="Write a message..."></textarea>
+        <button id="send_button">Send</button>
+    </div>
+
+    <!-- Dodaj token CSRF -->
+    <form method="POST" id="csrf_form" style="display: none;">
+        {% csrf_token %}
+    </form>
+
+    <script>
+        document.getElementById("send_button").addEventListener("click", function() {
+            let message = document.getElementById("user_input").value;
+            let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;  // Pobierz token CSRF
+
+            fetch('/chatbot/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrfToken,  // Dodaj token CSRF do nagłówka
+                },
+                body: 'message=' + encodeURIComponent(message),
+            })
+            .then(response => response.json())
+            .then(data => {
+                let chatlog = document.getElementById("chatlog");
+                chatlog.innerHTML += "<p><strong>You:</strong> " + message + "</p>";
+                chatlog.innerHTML += "<p><strong>Bot:</strong> " + data.response + "</p>";
+                document.getElementById("user_input").value = '';  // Wyczyść pole po wysłaniu
+                chatlog.scrollTop = chatlog.scrollHeight;  // Przewiń do dołu
+            });
+        });
+    </script>
+</body>
+</html>
