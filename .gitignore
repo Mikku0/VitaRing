@@ -29,9 +29,7 @@ ENV/
 *.iml
 
 # Pliki modeli TensorFlow/Keras
-*.h5
 *.pb
-*.pkl
 *.ckpt
 __pycache__/
 *.hdf5
