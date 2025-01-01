@@ -14,6 +14,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 models_dir = os.path.join(BASE_DIR, 'base', 'model')
 print("Ścieżka do modelu:", os.path.join(models_dir, 'chatbot_model_polish.h5'))
 
+
+nltk.download('punkt')
+nltk.download('punkt_tab')
+
 # Inicjalizacja lemmatizera
 lemmatizer = WordNetLemmatizer()
 
