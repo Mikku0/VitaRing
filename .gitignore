@@ -42,7 +42,7 @@ __pycache__/
 *.log
 
 # Pliki statyczne wygenerowane przez Django
-staticfiles/
+#staticfiles/
 media/
 node_modules/
 
